@@ -93,9 +93,45 @@ FUNDAMENTALLY_STRONG = [
     "BHARTIHEXA.NS",
 ]
 
+# NIFTY 50 constituents (as of 8 Dec 2025 - NSE rebalances semi-annually, so
+# re-check niftyindices.com if this drifts stale). BAJAJ-AUTO and M&M use
+# NSE's actual symbol formatting; verify these two resolve on yfinance in
+# your environment before relying on them.
+NIFTY_50 = [
+    "ADANIENT.NS", "ADANIPORTS.NS", "APOLLOHOSP.NS", "ASIANPAINT.NS", "AXISBANK.NS",
+    "BAJAJ-AUTO.NS", "BAJFINANCE.NS", "BAJAJFINSV.NS", "BEL.NS", "BHARTIARTL.NS",
+    "CIPLA.NS", "COALINDIA.NS", "DRREDDY.NS", "EICHERMOT.NS", "ETERNAL.NS",
+    "GRASIM.NS", "HCLTECH.NS", "HDFCBANK.NS", "HDFCLIFE.NS", "HINDALCO.NS",
+    "HINDUNILVR.NS", "ICICIBANK.NS", "INDIGO.NS", "INFY.NS", "ITC.NS",
+    "JIOFIN.NS", "JSWSTEEL.NS", "KOTAKBANK.NS", "LT.NS", "M&M.NS",
+    "MARUTI.NS", "MAXHEALTH.NS", "NESTLEIND.NS", "NTPC.NS", "ONGC.NS",
+    "POWERGRID.NS", "RELIANCE.NS", "SBILIFE.NS", "SHRIRAMFIN.NS", "SBIN.NS",
+    "SUNPHARMA.NS", "TCS.NS", "TATACONSUM.NS", "TMPV.NS", "TATASTEEL.NS",
+    "TECHM.NS", "TITAN.NS", "TRENT.NS", "ULTRACEMCO.NS", "WIPRO.NS",
+]
+
+# NIFTY NEXT 50 constituents (as of 30 Mar 2026, sourced from an index-fund
+# factsheet - 48 of 50 captured, 2 missing from source extraction). Flagged
+# entries below are recent listings/renames worth double-checking on
+# nseindia.com before relying on them.
+NIFTY_NEXT_50 = [
+    "ABB.NS", "ADANIENSOL.NS", "ADANIGREEN.NS", "ADANIPOWER.NS", "AMBUJACEM.NS",
+    "BAJAJHLDNG.NS", "BANKBARODA.NS", "BOSCHLTD.NS", "BPCL.NS", "BRITANNIA.NS",
+    "CANBK.NS", "CGPOWER.NS", "CHOLAFIN.NS", "CUMMINSIND.NS", "DIVISLAB.NS",
+    "DLF.NS", "DMART.NS", "GAIL.NS", "GODREJCP.NS", "HAL.NS",
+    "HDFCAMC.NS", "HINDZINC.NS", "HYUNDAI.NS", "INDHOTEL.NS", "IOC.NS",
+    "IRFC.NS", "JINDALSTEL.NS", "LODHA.NS", "LTIM.NS", "MAZDOCK.NS",
+    "MOTHERSON.NS", "MUTHOOTFIN.NS", "PFC.NS", "PIDILITIND.NS", "PNB.NS",
+    "RECLTD.NS", "SHREECEM.NS", "SIEMENS.NS", "SOLARINDS.NS", "TATAPOWER.NS",
+    "TATAMOTORS.NS", "TORNTPHARM.NS", "TVSMOTOR.NS", "UNIONBANK.NS", "VBL.NS",
+    "VEDL.NS", "ZYDUSLIFE.NS",
+    # verify before relying on these three (recent listing/rename risk):
+    # Siemens Energy India, Tata Capital, United Spirits
+]
+
 # Merge all watchlists and de-duplicate (preserving first-seen order) so the
 # same symbol never gets scanned - and reported - more than once.
-SYMBOLS = list(dict.fromkeys(CORE_WATCHLIST + MTF_WATCHLIST + FUNDAMENTALLY_STRONG))
+SYMBOLS = list(dict.fromkeys(FUNDAMENTALLY_STRONG + NIFTY_50 + NIFTY_NEXT_50))
 
 LOOKBACK_PERIOD = "1y"     # enough history for a stable 50 EMA warm-up
 MAX_ROWS_PER_CATEGORY = 15  # trim long lists in the Telegram message
