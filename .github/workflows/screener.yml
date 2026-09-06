@@ -1,0 +1,28 @@
+name: NSE EMA 20/50 Screener
+
+on:
+  schedule:
+    # 12:15 UTC = 17:45 IST, Mon-Fri (after NSE close + EOD data settling)
+    - cron: "15 12 * * 1-5"
+  workflow_dispatch: {}   # lets you trigger a manual test run from the Actions tab
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run screener
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 nse_ema_screener.py
