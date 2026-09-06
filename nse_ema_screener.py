@@ -49,13 +49,19 @@ EMA_SLOW = 50
 # NSE symbols in Yahoo Finance format (".NS" suffix). BSE-only names use
 # ".BO" instead. Edit freely - swap in a full NIFTY 100/200/500 list if you
 # want broader coverage (no TradingView-style call cap here).
-SYMBOLS = [
+CORE_WATCHLIST = [
     "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "ICICIBANK.NS", "INFY.NS",
     "HINDUNILVR.NS", "ITC.NS", "SBIN.NS", "BHARTIARTL.NS", "KOTAKBANK.NS",
     "LT.NS", "AXISBANK.NS", "BAJFINANCE.NS", "MARUTI.NS", "ASIANPAINT.NS",
     "HCLTECH.NS", "SUNPHARMA.NS", "TITAN.NS", "ULTRACEMCO.NS", "WIPRO.NS",
     "ADANIENT.NS", "NTPC.NS", "POWERGRID.NS", "TATAMOTORS.NS", "TATASTEEL.NS",
-    "JSWSTEEL.NS", "NESTLEIND.NS", "ONGC.NS", "COALINDIA.NS", "BAJAJFINSV.NS", "ATHERENERG.NS", "TEJASNET.NS", "MASTEK.NS", "NETWEB.NS", "COFORGE.NS",
+    "JSWSTEEL.NS", "NESTLEIND.NS", "ONGC.NS", "COALINDIA.NS", "BAJAJFINSV.NS",
+]
+
+# MTF-eligible watchlist (partial snapshot from a broker's screener - not
+# exhaustive, see chat notes).
+MTF_WATCHLIST = [
+    "ATHERENERG.NS", "TEJASNET.NS", "MASTEK.NS", "NETWEB.NS", "COFORGE.NS",
     "TVSMOTOR.NS", "HDFCBANK.NS", "HINDCOPPER.NS", "RELIANCE.NS", "IFCI.NS",
     "BSE.NS", "FMGOETZE.NS", "VBL.NS", "APARINDS.NS", "LAURUSLABS.NS",
     "RECLTD.NS", "MCX.NS", "OMAXE.NS", "JIOFIN.NS", "BHARTIARTL.NS",
@@ -73,6 +79,23 @@ SYMBOLS = [
     "IKIO.NS", "MARUTI.NS", "TECHM.NS", "ANGELONE.NS", "ETERNAL.NS",
     "SHRIRAMFIN.NS", "BHEL.NS", "FORCEMOT.NS", "CHENNPETRO.NS", "WIPRO.NS",
 ]
+
+# Fundamentally strong (high ROCE/ROE, low D/E) large + mid caps, from
+# Screener.in / Equitymaster quality screens (see chat notes).
+FUNDAMENTALLY_STRONG = [
+    "TITAN.NS", "BEL.NS", "HAL.NS", "COALINDIA.NS", "NESTLEIND.NS",
+    "EICHERMOT.NS", "VBL.NS", "DIVISLAB.NS", "CUMMINSIND.NS", "PIDILITIND.NS",
+    "ABB.NS", "CGPOWER.NS", "TCS.NS", "INFY.NS", "HINDUNILVR.NS",
+    "ITC.NS", "HCLTECH.NS", "ASIANPAINT.NS", "LTIM.NS", "HDFCAMC.NS",
+    "HEROMOTOCO.NS", "BOSCHLTD.NS", "MARICO.NS", "PAGEIND.NS", "GLAXO.NS",
+    "DIXON.NS", "IRCTC.NS", "ABBOTINDIA.NS", "NATIONALUM.NS", "SOLARINDS.NS",
+    "PREMIERENE.NS", "PERSISTENT.NS", "LTTS.NS", "KALYANKJIL.NS", "MAZDOCK.NS",
+    "BHARTIHEXA.NS",
+]
+
+# Merge all watchlists and de-duplicate (preserving first-seen order) so the
+# same symbol never gets scanned - and reported - more than once.
+SYMBOLS = list(dict.fromkeys(CORE_WATCHLIST + MTF_WATCHLIST + FUNDAMENTALLY_STRONG))
 
 LOOKBACK_PERIOD = "1y"     # enough history for a stable 50 EMA warm-up
 MAX_ROWS_PER_CATEGORY = 15  # trim long lists in the Telegram message
