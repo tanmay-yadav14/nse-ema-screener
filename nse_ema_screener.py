@@ -124,6 +124,19 @@ def drop_incomplete_today_bar(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def extract_close(df: pd.DataFrame) -> pd.Series:
+    """
+    Recent yfinance versions return a MultiIndex on columns (Price x Ticker),
+    even for a single-symbol download - so df["Close"] can come back as a
+    1-column DataFrame instead of a plain Series. Normalize to a Series
+    regardless of yfinance version / column orientation.
+    """
+    close = df["Close"]
+    if isinstance(close, pd.DataFrame):
+        close = close.iloc[:, 0]
+    return close
+
+
 def scan_symbol(symbol: str) -> Result | None:
     try:
         df = yf.download(symbol, period=LOOKBACK_PERIOD, interval="1d",
@@ -140,7 +153,7 @@ def scan_symbol(symbol: str) -> Result | None:
     if len(df) < EMA_SLOW + 3:
         return None
 
-    close = df["Close"]
+    close = extract_close(df)
     ema_fast_series = close.ewm(span=EMA_FAST, adjust=False).mean()
     ema_slow_series = close.ewm(span=EMA_SLOW, adjust=False).mean()
 
